@@ -1,0 +1,58 @@
+---
+title: "task_2"
+author: "kimmy wong"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+library(paletteer)
+library(ggrepel)
+library(gghighlight)
+```
+
+```{r}
+sf_ghg <- read_csv(here("data", "San_Francisco_Communitywide_Greenhouse_Gas_Inventory.csv"))
+```
+
+```{r}
+sum_tbl_1 <- sf_ghg %>% 
+  select(Emissions_mtCO2e, Sector_General) %>% 
+   group_by(Sector_General) %>% 
+  summarise(total = sum(Emissions_mtCO2e, na.rm = TRUE))
+
+sum_tbl_2 <- sf_ghg %>% 
+  select(Emissions_mtCO2e, Calendar_Year, Commodity_Type) %>% 
+   group_by(Calendar_Year, Commodity_Type) %>% 
+  summarise(total = sum(Emissions_mtCO2e, na.rm = TRUE))
+
+sum_tbl_3 <- sf_ghg %>% 
+  filter(Calendar_Year >= 2005) %>%  
+filter(str_detect(Sector_Detail2, "PG&E")) %>% 
+  select(Calendar_Year, Sector_Detail2, Emissions_mtCO2e)
+```
+
+```{r}
+ggplot(sum_tbl_3, aes(x = Calendar_Year, y = Emissions_mtCO2e)) +
+  geom_col() +
+  labs(title = "San Francisco Greenhouse Gas Emissions \n (2005 - 2019)",
+       x = "Year",
+       y = "Greenhouse gas emissions \n(metric tons of C02 equivalents)",
+       caption = "Data: data.SFgov.org") +
+  theme_minimal() +
+  geom_vline(xintercept = 2015, linetype = "dashed", color = "black") +
+   annotate("text", x = 2017.5, y = 3.5e+06,
+           label = " SF began to improve its GHG \n emissions inventory by using \n Global Protocol for Community-Scale \n Greenhouse Gas Emissions Inventories (GPC)", size = 2.1) 
+  
+```
+
+
+
+
+
+
+
+

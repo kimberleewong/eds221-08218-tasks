@@ -1,0 +1,47 @@
+---
+title: "space_launch_viz"
+author: "kimmy wong"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+library(paletteer)
+library(ggrepel)
+library(gghighlight)
+```
+
+```{r}
+space_launch <- read_csv(here("data", "space_launches.csv"))
+```
+
+```{r}
+ggplot(data = space_launch, aes(x = launch_year, y = agency)) +
+  geom_violin(color = "green") +
+  theme(plot.background = element_rect(fill = "pink"),
+  panel.background = element_rect(fill = "cadetblue3", color = "orange"),
+  panel.grid.major = element_line(color = "red"),
+  text = element_text(size = 12, family = "serif")) +
+  annotate("text",
+           x = 1970,
+           y = "SEALP",
+           label ="W0Ww00OWoooo ROCkeTs",
+           color = "purple") +
+  annotate("text",
+           x = 2000,
+           y = "LMA",
+           label ="moooorreee rOCkeTsssss",
+           color = "purple") +
+  labs(x = "YeAr",
+       y = "aGeNCy",
+       title = "rocektss in space") +
+  scale_x_continuous(limits = c(1960, 2020), 
+                     expand = c(0,0),
+                     breaks = seq(1960, 2020, by = 1))
+  
+
+            
+      
